@@ -313,3 +313,8 @@ Este fork Ã© independente e nÃ£o Ã© endossado oficialmente pelo mantenedor origi
 **Segurança:** não exponha os servidores de desenvolvimento à internet. A autorização de acesso e os termos das fontes de dados devem ser respeitados pelo usuário, sem afastar as obrigações de segurança e privacidade dos desenvolvedores e operadores. Leia os [manuais da ponte](manuais/20-integracao-oficial-gods-eye.md), [missão](manuais/21-geo-mission-cinematica.md) e [painéis](manuais/22-paineis-camadas-geo.md).
 
 
+
+### ?? Novo: favoritos geográficos (Geo Mission 0.3)
+
+Na Central de Missões (`/geo-mission`), use **Cadastrar preset** para salvar um destino com nome e coordenadas, ou **Salvar local exibido** para capturar a câmera atual do globo. Favoritos são locais ao navegador, podem ser exportados/importados em JSON e não exigem conta. Veja o [manual de presets](manuais/23-presets-geograficos.md). A integração é experimental e depende dos dois serviços locais; não há demonstração pública hospedada.
+
