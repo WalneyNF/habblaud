@@ -33,6 +33,8 @@ function secureFile(base:string,rel:string):string{
  const parts=rel.split('/');
  if(parts.some(p=>!p||p==='.'||p==='..'||p.startsWith('.')))throw Error('Arquivos ocultos e caminhos relativos especiais estão bloqueados.');
  if(parts.some(p=>/^(node_modules|dist|build|coverage|private|secrets?)$/i.test(p)||/^(\.env|.*\.key|.*\.pem|.*\.p12|.*\.pfx)$/i.test(p)))throw Error('Arquivo protegido.');
+ const name=parts[parts.length-1];
+ if(!/\.(js|jsx|ts|tsx|css|html|md|txt|json|py|php|lua|sql|xml|yaml|yml)$/i.test(name)||/(secret|credential|password|token|private|config\.local)/i.test(name))throw Error('Somente arquivos de código e documentação não sensíveis.');
  const target=resolve(base,...parts);
  const canonical=realpathSync(target);
  if(relative(base,canonical).startsWith('..'+sep)||relative(base,canonical)==='..'||isAbsolute(relative(base,canonical)))throw Error('Acesso fora da pasta autorizada.');

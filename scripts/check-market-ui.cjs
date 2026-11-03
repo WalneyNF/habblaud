@@ -1,0 +1,1 @@
+const fs=require('node:fs');const vm=require('node:vm');const s=fs.readFileSync('D:/xampp2/htdocs/habblaud/community/agent-market.html','utf8');const m=s.match(/<script>([\s\S]*?)<\/script>/);if(!m)throw Error('Script ausente');new vm.Script(m[1]);console.log('JavaScript do marketplace: sintaxe OK');

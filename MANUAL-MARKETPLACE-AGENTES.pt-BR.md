@@ -16,6 +16,10 @@ Abra http://127.0.0.1:4747/agent-market depois de iniciar o Habblaud.
 
 A versão inicial é somente leitura, restrita ao computador local. Não executa comandos, não escreve arquivos nem executa MCP. Arquivos ocultos e alguns caminhos sensíveis são bloqueados. A leitura exige seleção de arquivo. O envio ao modelo exige confirmação; provedores externos recebem o conteúdo e podem cobrar por uso. Não autorize pastas com segredos ou dados de clientes.
 
+## Propor correções sem modificar o disco
+
+Depois de pré-visualizar um arquivo, clique em **Propor código corrigido (sem salvar)**. O modelo responderá com uma versão sugerida do arquivo. Clique em **Comparar com o arquivo original** para visualizar linhas diferentes. A comparação atual é simplificada, podendo ser imprecisa quando há inserção ou remoção de linhas. Revise a proposta manualmente: nenhum arquivo será alterado pelo Marketplace.
+
 ## Próximos passos
 
 Criar ferramentas de proposta de alterações, aprovação de diffs, backup, reversão, logs, execução isolada de testes e cliente MCP real. Essas capacidades ainda não estão implementadas.
