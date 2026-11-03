@@ -1,0 +1,29 @@
+/* Skin alternativa da interface; não altera o cenário sazonal nem as mecânicas do escritório. */
+:root[data-office-skin="hacker"] .ui-topbar,
+:root[data-office-skin="hacker"] .ui-popover,
+:root[data-office-skin="hacker"] .ui-dialog,
+:root[data-office-skin="hacker"] .ui-sidebar,
+:root[data-office-skin="hacker"] .ui-drawer,
+:root[data-office-skin="hacker"] .ui-feed {
+  background: #061711 !important;
+  color: #c9ffe0 !important;
+  border-color: #288b55 !important;
+  box-shadow: 0 0 16px #00ff6622;
+}
+:root[data-office-skin="hacker"] .ui-topbar button,
+:root[data-office-skin="hacker"] .ui-popover button,
+:root[data-office-skin="hacker"] .ui-dialog button {
+  border-color: #27764a;
+  color: #aaffcf;
+}
+:root[data-office-skin="hacker"] .ui-topbar button:hover,
+:root[data-office-skin="hacker"] .ui-popover button:hover {
+  background: #11462b !important;
+}
+:root[data-office-skin="hacker"] .ui-brand__text,
+:root[data-office-skin="hacker"] .ui-set__label,
+:root[data-office-skin="hacker"] .ui-popover__head {
+  color: #57ff9a !important;
+  text-shadow: 0 0 9px #1bff7840;
+}
+:root[data-office-skin="hacker"] .ui-topbar { border-bottom: 1px solid #238b53 !important; }

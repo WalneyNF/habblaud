@@ -133,8 +133,8 @@ export class TopBar implements UiComponent {
       this.feedBtn,
       this.worldBtn,
       this.settingsBtn,
-      h('button', { class: 'ui-btn', type: 'button', title: 'Abrir o Marketplace de Agentes IA', attrs: { 'aria-label': 'Marketplace de Agentes IA' }, on: { click: () => { window.location.assign('/agent-market'); } } }, '🤖 IA'),
-      h('button', { class: 'ui-btn', type: 'button', title: 'Abrir a Central de Provedores IA', attrs: { 'aria-label': 'Central de Provedores IA' }, on: { click: () => { window.location.assign('/ia-lab'); } } }, '⚙ IA'),
+      h('button', { class: 'ui-btn', type: 'button', title: 'Abrir o Marketplace de Agentes IA', attrs: { 'aria-label': 'Marketplace de Agentes IA' }, on: { click: () => this.openAiModal('/agent-market', 'Marketplace de Agentes IA') } }, '🤖 IA'),
+      h('button', { class: 'ui-btn', type: 'button', title: 'Abrir a Central de Provedores IA', attrs: { 'aria-label': 'Central de Provedores IA' }, on: { click: () => this.openAiModal('/ia-lab', 'Central de Provedores IA') } }, '⚙ IA'),
       iconButton(ICONS.help, tr('Ajuda (?)'), () => ctx.openHelp()),
     );
     this.panelGroup = panelGroup;
@@ -157,6 +157,35 @@ export class TopBar implements UiComponent {
       this.usage.el,
       h('div', { class: 'ui-topbar__right' }, viewGroup, panelGroup),
     );
+  }
+
+  /** Janela modal local: mantém o usuário no escritório e isola a interface existente. */
+  private openAiModal(path: '/agent-market' | '/ia-lab', title: string): void {
+    const existing = document.getElementById('habblaud-ai-modal') as HTMLDialogElement | null;
+    if (existing) existing.remove();
+    const dialog = document.createElement('dialog');
+    dialog.id = 'habblaud-ai-modal';
+    dialog.setAttribute('aria-label', title);
+    dialog.style.cssText = 'width:min(1200px,96vw);height:min(850px,94vh);max-width:96vw;max-height:94vh;padding:0;border:1px solid #668b9b;border-radius:12px;background:#111b29;color:#f1f7ff;overflow:hidden';
+    const bar = document.createElement('div');
+    bar.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 14px;background:#1c3043;gap:12px';
+    const label = document.createElement('strong');
+    label.textContent = title;
+    const close = document.createElement('button');
+    close.type = 'button';
+    close.textContent = '✕ Fechar';
+    close.setAttribute('aria-label', 'Fechar janela de IA');
+    close.addEventListener('click', () => dialog.close());
+    bar.append(label, close);
+    const frame = document.createElement('iframe');
+    frame.src = path;
+    frame.title = title;
+    frame.style.cssText = 'display:block;width:100%;height:calc(100% - 46px);border:0;background:#111b29';
+    dialog.append(bar, frame);
+    dialog.addEventListener('close', () => dialog.remove(), { once: true });
+    document.body.append(dialog);
+    dialog.showModal();
+    close.focus();
   }
 
   /** Acrescenta um selo à linha de status da marca, depois da versão (ex.: o chip do Habblaud World). */

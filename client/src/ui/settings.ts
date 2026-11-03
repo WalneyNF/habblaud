@@ -1,6 +1,15 @@
 // Configurações (popover): opções do escritório, avisos, modo demonstração e Sobre (versão). O Habblaud World tem a
 // janela própria (ui/world/world-dialog.ts); daqui só sai a dica do tema em Aparência, que também vai para o prédio.
 import { access, remoteLogout } from '../net/access';
+import './hacker-skin.css';
+
+const SKIN_KEY = 'habblaud:office-skin';
+function applyOfficeSkin(value: string): void {
+  const skin = value === 'hacker' ? 'hacker' : 'original';
+  document.documentElement.dataset.officeSkin = skin;
+  try { localStorage.setItem(SKIN_KEY, skin); } catch { /* armazenamento opcional */ }
+}
+try { applyOfficeSkin(localStorage.getItem(SKIN_KEY) || 'original'); } catch { applyOfficeSkin('original'); }
 import type { UiComponent, UiContext } from './context';
 import { h, iconButton, setAttr, setHidden, setText } from './dom';
 import { ICONS } from './icons';
@@ -89,6 +98,7 @@ export class SettingsPopover implements UiComponent {
   private liveliness: ReturnType<typeof segmented<UiPrefs['liveliness']>>;
   private daylight: ReturnType<typeof segmented<UiPrefs['daylight']>>;
   private theme: ReturnType<typeof segmented<UiPrefs['theme']>>;
+  private skin: ReturnType<typeof segmented<'original' | 'hacker'>>;
   private language: ReturnType<typeof segmented<LanguageChoice>>;
   private soundGroup: SoundSettingsGroup;
   private demoGroup: HTMLElement;
@@ -151,6 +161,9 @@ export class SettingsPopover implements UiComponent {
       },
     );
     this.theme.row.append(h('span', { class: 'ui-set__hint', text: tr('Automático: Halloween em outubro e Natal de 1º de novembro a 26 de dezembro; no resto do ano, o visual original. Nenhum: sempre o original.') }));
+    this.skin = segmented<'original' | 'hacker'>('Estilo da interface', [['original', 'Original'], ['hacker', 'Hacker IA']], (value) => { applyOfficeSkin(value); this.skin.set(value); });
+    this.skin.set(document.documentElement.dataset.officeSkin === 'hacker' ? 'hacker' : 'original');
+    this.skin.row.append(h('span', { class: 'ui-set__hint', text: 'Altera painéis e interface. O tema sazonal acima altera a decoração do cenário.' }));
     this.soundGroup = new SoundSettingsGroup(ctx, sound);
 
     // Nomes dos idiomas sempre na própria língua, para quem não entende o idioma atual achar o seu.
@@ -196,7 +209,7 @@ export class SettingsPopover implements UiComponent {
       'div',
       { class: 'ui-popover ui-settings', role: 'dialog', tabIndex: -1, attrs: { 'aria-label': tr('Configurações'), id: 'ui-settings', popover: 'auto' } },
       h('div', { class: 'ui-popover__head' }, h('h2', { text: tr('Configurações') }), close),
-      h('div', { class: 'ui-set-group' }, h('h3', { text: tr('Aparência') }), this.theme.row),
+      h('div', { class: 'ui-set-group' }, h('h3', { text: tr('Aparência') }), this.theme.row, this.skin.row),
       h(
         'div',
         { class: 'ui-set-group' },
