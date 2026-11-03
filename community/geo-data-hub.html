@@ -2,7 +2,7 @@
 :root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#07111c;color:#e5f4fb;font:15px/1.5 system-ui}header{padding:18px 24px;background:#102536;border-bottom:1px solid #2e6973;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}a{color:#85ebd7}main{max-width:1250px;margin:auto;padding:24px}h1{font-size:24px;margin:0}h2{font-size:18px;margin:0 0 10px}.sub{color:#a8c4ce;font-size:13px}.controls,.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}.controls{padding:16px;background:#102536;border:1px solid #315b6a;border-radius:12px;margin-bottom:20px}.card{background:#102536;border:1px solid #315b6a;border-radius:12px;padding:16px;min-height:210px}.card.error{border-color:#b8746e}.card.loading{opacity:.75}label{display:block;font-size:12px;color:#a9cad2;margin-bottom:4px}input{width:100%;padding:9px;background:#071a29;border:1px solid #4a8290;border-radius:7px;color:white}button{border:0;background:#4cdbb6;color:#062d2c;font-weight:700;border-radius:8px;padding:10px 15px;cursor:pointer}button:disabled{opacity:.5}.items{display:grid;gap:7px}.item{padding:7px 0;border-bottom:1px solid #274756}small{color:#a6bfc8}.source{font-size:12px;margin-top:12px}.value{font-size:27px;font-weight:700;color:#85e9ce}footer{padding:30px 24px;text-align:center;color:#9bb8c5}code{color:#a3f0e2}#status{min-height:24px;color:#b4d6df}</style></head><body>
 <header><div><h1>🌍 Geo Mission BR · Data Hub 0.1</h1><div class="sub">Laboratório de dados geográficos públicos · Consultas reais sob demanda</div></div><nav><a href="/geo-mission">← Globo 3D</a> · <a href="/roadmap.html">Roadmap</a></nav></header>
 <main><section class="controls"><div><label for="lat">Latitude</label><input id="lat" type="number" min="-90" max="90" step="any" value="-22.2819"></div><div><label for="lon">Longitude</label><input id="lon" type="number" min="-180" max="180" step="any" value="-42.5311"></div><div><label for="radius">Raio para artigos (metros)</label><input id="radius" type="number" min="100" max="10000" step="100" value="3000"></div><div><label>Consultas</label><button id="load">🔎 Consultar APIs</button></div><div style="grid-column:1/-1"><div id="status" role="status">Coordenadas iniciais: Nova Friburgo, RJ. Clique para consultar.</div><small>As coordenadas consultadas são enviadas diretamente aos provedores selecionados. Não consulte endereços privados sem necessidade.</small></div></section>
-<div class="cards">
+<section class="card" style="min-height:0;margin-bottom:16px"><h2>🧩 Catálogo de provedores</h2><div class="sub">Ative as fontes que deseja consultar. Preferências ficam apenas neste navegador.</div><div id="providerCatalog" class="controls" style="margin:12px 0 0;padding:12px"></div></section><section class="card" id="dossier" style="min-height:0;margin-bottom:16px"><h2>📖 Dossiê geográfico do ponto</h2><div class="sub">Os dados aparecem após consultar as APIs habilitadas; não há preenchimento fictício.</div><div id="dossierData" class="items" style="margin:12px 0">Nenhum dado consultado.</div><button id="exportGeo" disabled>⬇ Exportar ponto GeoJSON</button> <button id="copyReport" disabled>📋 Copiar relatório</button> <a id="mapPoint" href="/geo-mission">🌍 Abrir globo</a></section><div class="cards">
 <section class="card" id="weather"><h2>🌤️ Meteorologia</h2><div class="items">Aguardando consulta.</div><div class="source"><a href="https://open-meteo.com/en/docs" target="_blank" rel="noopener">Fonte: Open-Meteo</a></div></section>
 <section class="card" id="air"><h2>🌬️ Qualidade do ar</h2><div class="items">Aguardando consulta.</div><div class="source"><a href="https://open-meteo.com/en/docs/air-quality-api" target="_blank" rel="noopener">Fonte: Open-Meteo Air Quality</a></div></section>
 <section class="card" id="elevation"><h2>⛰️ Altitude do terreno</h2><div class="items">Aguardando consulta.</div><div class="source"><a href="https://open-meteo.com/en/docs/elevation-api" target="_blank" rel="noopener">Fonte: Open-Meteo Elevation</a></div></section>
@@ -15,15 +15,50 @@
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let seq=0;
+const PROVIDERS=[
+ {id:'weather',name:'🌤️ Meteorologia',origin:'Open-Meteo'},
+ {id:'air',name:'🌬️ Qualidade do ar',origin:'Open-Meteo'},
+ {id:'elevation',name:'⛰️ Altitude',origin:'Open-Meteo'},
+ {id:'wiki',name:'📚 Wikipédia',origin:'Wikimedia'},
+ {id:'quake',name:'🌎 Terremotos globais',origin:'USGS'}
+];
+const STORAGE_KEY='geo-data-hub-providers-v1';
+let settings={};try{const raw=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');if(raw&&typeof raw==='object')settings=raw}catch{}
+for(const p of PROVIDERS){
+ const label=document.createElement('label');label.style.cssText='display:flex;align-items:center;gap:9px;font-size:14px';
+ const input=document.createElement('input');input.type='checkbox';input.checked=settings[p.id]!==false;input.style.width='auto';
+ input.addEventListener('change',()=>{settings[p.id]=input.checked;try{localStorage.setItem(STORAGE_KEY,JSON.stringify(settings))}catch{};$(p.id).hidden=!input.checked});
+ label.append(input,document.createTextNode(p.name+' · '+p.origin));$('providerCatalog').append(label);$(p.id).hidden=!input.checked;
+}
+let dossierState=null;
+function dossierUpdate(){
+ if(!dossierState)return;
+ const rows=[line('Latitude',dossierState.lat.toFixed(6)),line('Longitude',dossierState.lon.toFixed(6))];
+ for(const p of PROVIDERS){const s=dossierState.sources[p.id];if(!s)continue;rows.push(line(p.name,s.ok?s.summary+' · '+s.at:'Falha · '+s.error))}
+ $('dossierData').innerHTML=rows.join('');
+ $('exportGeo').disabled=false;$('copyReport').disabled=false;
+}
+$('exportGeo').onclick=()=>{
+ if(!dossierState)return;
+ const payload={type:'FeatureCollection',features:[{type:'Feature',geometry:{type:'Point',coordinates:[dossierState.lon,dossierState.lat]},properties:{source:'Geo Mission BR Data Hub',collectedAt:dossierState.createdAt,providers:dossierState.sources}}]};
+ const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/geo+json'});
+ const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='geo-mission-ponto.geojson';a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);
+};
+$('copyReport').onclick=async()=>{
+ if(!dossierState)return;
+ const text=['Geo Mission BR — Dossiê geográfico','Coordenadas: '+dossierState.lat+', '+dossierState.lon,'Consulta: '+dossierState.createdAt,...PROVIDERS.map(p=>{const s=dossierState.sources[p.id];return p.name+': '+(s?s.ok?s.summary+' (consultado em '+s.at+')':'falhou: '+s.error:'não consultado')})].join('\n');
+ try{await navigator.clipboard.writeText(text);$('status').textContent='Relatório copiado.'}catch{$('status').textContent='Cópia não autorizada pelo navegador.'}
+};
+
 async function request(url,ms=12000){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),ms);try{const r=await fetch(url,{signal:controller.signal,credentials:'omit'});if(!r.ok)throw Error('HTTP '+r.status);return await r.json()}finally{clearTimeout(timer)}}
 function render(id,content,error=false){const card=$(id);card.classList.remove('loading');card.classList.toggle('error',error);card.querySelector('.items').innerHTML=content}
 function line(title,value){return '<div class="item"><strong>'+esc(title)+'</strong>: '+esc(value)+'</div>'}
 function safeLink(url,title){try{const u=new URL(url);if(u.protocol!=='https:')return esc(title);return '<a href="'+esc(u.href)+'" target="_blank" rel="noopener noreferrer">'+esc(title)+'</a>'}catch{return esc(title)}}
-async function moduleLoad(id,fn,token){try{const html=await fn();if(token===seq)render(id,html)}catch(e){if(token===seq)render(id,line('Falha',e.name==='AbortError'?'Tempo limite da API':e.message),true)}}
+async function moduleLoad(id,fn,token){if(settings[id]===false)return;try{const html=await fn();if(token===seq){render(id,html);dossierState.sources[id]={ok:true,at:new Date().toISOString(),summary:$(id).querySelector('.items').textContent.slice(0,1600)};dossierUpdate()}}catch(e){if(token===seq){const error=e.name==='AbortError'?'Tempo limite da API':String(e.message||e);render(id,line('Falha',error),true);dossierState.sources[id]={ok:false,error};dossierUpdate()}}}
 $('load').onclick=async()=>{
  const lat=Number($('lat').value),lon=Number($('lon').value),radius=Number($('radius').value);
  if(!Number.isFinite(lat)||!Number.isFinite(lon)||Math.abs(lat)>90||Math.abs(lon)>180||!Number.isFinite(radius)||radius<100||radius>10000){$('status').textContent='Coordenadas ou raio inválidos.';return}
- const token=++seq;$('status').textContent='Consultando cinco fontes independentes...';
+ const token=++seq;dossierState={lat,lon,createdAt:new Date().toISOString(),sources:{}};dossierUpdate();$('mapPoint').href='/geo-mission';$('status').textContent='Consultando '+PROVIDERS.filter(p=>settings[p.id]!==false).length+' fontes habilitadas...';
  for(const id of ['weather','air','elevation','wiki','quake']){$(id).classList.add('loading');render(id,'Consultando API...');$(id).classList.add('loading')}
  const jobs=[
  moduleLoad('weather',async()=>{const u=new URL('https://api.open-meteo.com/v1/forecast');u.search=new URLSearchParams({latitude:lat,longitude:lon,current:'temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,wind_speed_10m',timezone:'auto'});const d=await request(u);const c=d.current||{};return line('Temperatura',c.temperature_2m==null?'Indisponível':c.temperature_2m+' °C')+line('Sensação',c.apparent_temperature==null?'Indisponível':c.apparent_temperature+' °C')+line('Umidade',c.relative_humidity_2m==null?'Indisponível':c.relative_humidity_2m+'%')+line('Vento',c.wind_speed_10m==null?'Indisponível':c.wind_speed_10m+' km/h')+line('Horário dos dados',c.time||'Não informado')},token),
