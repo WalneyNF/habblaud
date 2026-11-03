@@ -219,6 +219,8 @@ const ALIAS_TOOLS: Record<Provider, { invokes: RegExp; dir: RegExp }> = {
     invokes: /(?:^|[\s;&|(])(?:[\w.~/-]*\/)?codex(?=$|[\s;&|)])/,
     dir: /\bCODEX_HOME=(?:"([^"]*)"|'([^']*)'|([^\s;&|]+))/,
   },
+  ollama: { invokes: /\bollama\b/, dir: /\bOLLAMA_MODELS=([^\s;&|]+)/ },
+  groq: { invokes: /\bgroq\b/, dir: /\bGROQ_HOME=([^\s;&|]+)/ },
 };
 
 /**

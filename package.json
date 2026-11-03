@@ -23,6 +23,8 @@
     "build:client": "vite build --config vite.config.ts",
     "build:server": "node scripts/build-server.mjs",
     "start": "node dist/server/index.js",
+    "start:ai": "node --env-file-if-exists=.env dist/server/index.js",
+    "dev:ai": "node --env-file-if-exists=.env --import tsx server/index.ts --dev",
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p server/tsconfig.json",
     "test": "vitest run",
     "i18n:check": "tsx scripts/i18n-check.ts",
