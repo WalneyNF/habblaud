@@ -1,0 +1,41 @@
+{
+  "name": "habblaud-ai-community-vscode",
+  "displayName": "Habblaud AI Community",
+  "description": "Analise seleções de código com agentes Habblaud locais, sem editar arquivos automaticamente.",
+  "version": "0.1.0",
+  "publisher": "walneynf",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "main": "./extension.js",
+  "activationEvents": [
+    "onCommand:habblaud.analyzeSelection"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "habblaud.analyzeSelection",
+        "title": "Habblaud: Analisar seleção com agente"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "habblaud.analyzeSelection",
+          "when": "editorHasSelection",
+          "group": "navigation@20"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Habblaud AI Community",
+      "properties": {
+        "habblaud.serverUrl": {
+          "type": "string",
+          "default": "http://127.0.0.1:4747",
+          "description": "Servidor Habblaud local. Somente loopback é aceito."
+        }
+      }
+    }
+  }
+}

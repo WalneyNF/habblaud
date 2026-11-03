@@ -1,0 +1,21 @@
+/* Marketplace: identidade do Habblaud original + tema alternativo */
+:root{--hb-bg:#10151e;--hb-panel:rgba(20,24,33,.97);--hb-line:rgba(160,176,210,.24);--hb-text:#e8ecf5;--hb-muted:#9aa4b8;--hb-accent:#7cc8ff;--hb-button:#29465e;--hb-input:#111923;--hb-glow:none;--hb-radius:10px}
+:root[data-theme="hacker"]{--hb-bg:#030c0a;--hb-panel:rgba(4,20,15,.97);--hb-line:rgba(35,240,128,.35);--hb-text:#c7ffe0;--hb-muted:#8cbba4;--hb-accent:#39ff91;--hb-button:#125436;--hb-input:#03130d;--hb-glow:0 0 17px rgba(23,255,118,.14);--hb-radius:3px}
+body{background:var(--hb-bg)!important;color:var(--hb-text)!important;font:13px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif!important}
+header{background:var(--hb-panel)!important;border-bottom:1px solid var(--hb-line)!important}
+a{color:var(--hb-accent)!important}
+.card,section,dialog{background:var(--hb-panel)!important;border:1px solid var(--hb-line)!important;border-radius:var(--hb-radius)!important;box-shadow:var(--hb-glow)}
+button{background:var(--hb-button)!important;border:1px solid var(--hb-line)!important;border-radius:var(--hb-radius)!important;color:var(--hb-text)!important}
+button:hover{border-color:var(--hb-accent)!important}
+input,textarea,select{background:var(--hb-input)!important;color:var(--hb-text)!important;border:1px solid var(--hb-line)!important;border-radius:var(--hb-radius)!important}
+pre{background:var(--hb-input)!important;color:var(--hb-text)!important}
+.muted,small{color:var(--hb-muted)!important}
+dialog{padding:24px;max-height:85vh;overflow:auto}
+dialog::backdrop{background:rgba(0,0,0,.75);backdrop-filter:blur(3px)}
+dialog h2{margin-top:0;color:var(--hb-accent)}
+header h1{font-size:20px;letter-spacing:.3px}
+header .theme-picker{float:right;max-width:180px;margin:0}
+:root[data-theme="hacker"] body{background-image:repeating-linear-gradient(0deg,transparent 0px,transparent 3px,rgba(35,255,115,.018) 4px)!important}
+:root[data-theme="hacker"] header h1,:root[data-theme="hacker"] h2{font-family:Consolas,monospace;letter-spacing:1px;text-shadow:0 0 9px rgba(57,255,145,.22)}
+:root[data-theme="hacker"] .card::before{content:"[ SYS::ACTIVE ]";display:block;color:var(--hb-accent);font:10px Consolas,monospace;margin-bottom:8px}
+@media(max-width:640px){header .theme-picker{float:none;max-width:100%;margin:8px 0}main{padding:12px!important}}
