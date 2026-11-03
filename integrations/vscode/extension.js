@@ -1,5 +1,6 @@
 'use strict';
 const vscode=require('vscode');
+const supervised=require('./supervised-edit');
 function server(){
  const raw=vscode.workspace.getConfiguration('habblaud').get('serverUrl','http://127.0.0.1:4747');
  const u=new URL(raw);
@@ -51,6 +52,7 @@ async function analyze(scope){
 function activate(context){
  context.subscriptions.push(vscode.commands.registerCommand('habblaud.analyzeSelection',()=>analyze('selection')));
  context.subscriptions.push(vscode.commands.registerCommand('habblaud.analyzeDocument',()=>analyze('document')));
+ context.subscriptions.push(vscode.commands.registerCommand('habblaud.proposeEdit',()=>supervised.propose(context,server,request)));
 }
 function deactivate(){}
 module.exports={activate,deactivate};

@@ -2,7 +2,7 @@
   "name": "habblaud-ai-community-vscode",
   "displayName": "Habblaud AI Community",
   "description": "Analise seleções de código com agentes Habblaud locais, sem editar arquivos automaticamente.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "publisher": "walneynf",
   "engines": {
     "vscode": "^1.85.0"
@@ -10,7 +10,8 @@
   "main": "./extension.js",
   "activationEvents": [
     "onCommand:habblaud.analyzeSelection",
-    "onCommand:habblaud.analyzeDocument"
+    "onCommand:habblaud.analyzeDocument",
+    "onCommand:habblaud.proposeEdit"
   ],
   "contributes": {
     "commands": [
@@ -21,6 +22,10 @@
       {
         "command": "habblaud.analyzeDocument",
         "title": "Habblaud: Analisar documento aberto com agente"
+      },
+      {
+        "command": "habblaud.proposeEdit",
+        "title": "Habblaud: Propor edição supervisionada"
       }
     ],
     "menus": {
