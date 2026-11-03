@@ -45,11 +45,16 @@ As imagens abaixo já fazem parte do repositório original e mostram recursos do
 | Chaves via arquivo `.env` no servidor | Implementado |
 | Manual HTML em `/manual-ia` | Implementado |
 | Agentes capazes de editar arquivos e executar testes automaticamente | **Ainda não implementado nesta integração** |
-| Instalação automática de Ollama, OpenCode ou modelos | **Ainda não implementada** |
+| Assistente Windows para verificar requisitos e oferecer instalação de Node/Git/Ollama via winget | **Implementado e testado com requisitos já instalados** |
+| Download automático de modelos Ollama e integração nativa com OpenCode CLI | **Ainda não implementados** |
 
 > **Transparência:** cadastrar um provedor não significa instalar automaticamente seu aplicativo, CLI ou modelo. A integração atual é **conversacional**; ela não executa comandos nem modifica arquivos. Os modelos de provedores externos podem mudar de nome ou disponibilidade.
 
 ## 🚀 Instalação para iniciantes
+
+**Windows (mais fácil):** baixe o ZIP desta edição, extraia a pasta e dê dois cliques em `INSTALAR-WINDOWS.cmd`. Depois, abra `INICIAR-HABBLAUD.cmd`. Consulte o [Manual do Instalador Windows](MANUAL-INSTALADOR-WINDOWS.pt-BR.md) para explicações e solução de problemas.
+
+**Instalação manual:** siga as etapas abaixo.
 
 ### 1. Instale o que é necessário
 
