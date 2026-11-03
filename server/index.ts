@@ -60,6 +60,7 @@ import { BuildingUplink } from './world/uplink';
 import { WorldViewer } from './world/viewer';
 import { createLocalAiHandler } from './local-ai';
 import { createWorkbenchHandler } from './agent-workbench';
+import { createStudioHandler } from './habblaud-studio';
 
 const config = loadConfig();
 const startedAt = Date.now();
@@ -382,6 +383,7 @@ const api = createApiHandler({
 
 const localAi = createLocalAiHandler(office, config.rootDir);
 const workbench = createWorkbenchHandler(config.rootDir);
+const studio = createStudioHandler(config.rootDir);
 const server = http.createServer();
 let closeVite: (() => Promise<void>) | undefined;
 
@@ -417,7 +419,7 @@ server.on('request', (req, res) => {
   const url = parseUrl(req);
   try {
     if (guard(req, res)) return;
-    if (!workbench(req, res, url) && !localAi(req, res, url) && !api(req, res, url)) fallback(req, res, url);
+    if (!studio(req, res, url) && !workbench(req, res, url) && !localAi(req, res, url) && !api(req, res, url)) fallback(req, res, url);
   } catch (err) {
     log.warn(tr('Erro ao responder {0} {1}: {2}', [req.method, url.pathname, errMsg(err)]));
     if (!res.headersSent) sendJson(res, 500, { error: tr('erro interno') });
@@ -451,7 +453,7 @@ if (config.remote) {
       try {
         if (guard(req, res)) return;
         if (gate(req, res, url)) return;
-        if (!workbench(req, res, url) && !localAi(req, res, url) && !api(req, res, url)) fallback(req, res, url);
+        if (!studio(req, res, url) && !workbench(req, res, url) && !localAi(req, res, url) && !api(req, res, url)) fallback(req, res, url);
       } catch (err) {
         log.warn(tr('Erro ao responder (remoto) {0} {1}: {2}', [req.method, url.pathname, errMsg(err)]));
         if (!res.headersSent) sendJson(res, 500, { error: tr('erro interno') });
