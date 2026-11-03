@@ -43,7 +43,7 @@ export function createLocalAiHandler(office: Office, root: string) {
   let seq=0;
   return (req: IncomingMessage,res: ServerResponse,url: URL): boolean => {
     const path=url.pathname;
-    if(!['/ia-lab','/manual-ia','/api/local-ai/models','/api/local-ai/providers','/api/local-ai/chat'].includes(path)) return false;
+    if(!['/ia-lab','/manual-ia','/api/local-ai/models','/api/local-ai/providers','/api/local-ai/chat','/api/local-ai/test'].includes(path)) return false;
     if(!local(req)){sendJson(res,403,{error:'Somente acesso local'});return true;}
     if(path==='/ia-lab'||path==='/manual-ia'){
       if(req.method!=='GET'){sendJson(res,405,{error:'Método não permitido'});return true;}
@@ -70,6 +70,31 @@ export function createLocalAiHandler(office: Office, root: string) {
         if(items.length>40){sendJson(res,400,{error:'Máximo de 40 provedores'});return;}
         save(items);sendJson(res,200,{provider:publicConfig(cfg)});
       }catch(e){sendJson(res,400,{error:errorText(e)});}})();return true;
+    }
+    if(path==='/api/local-ai/test' && req.method==='POST'){
+      void(async()=>{try{
+        const body=await readJson(req,3000) as Record<string,unknown>;
+        const cfg=load().find(x=>x.id===body.provider);
+        if(!cfg){sendJson(res,404,{ok:false,error:'Provedor não cadastrado'});return;}
+        if(cfg.keyEnv&&!process.env[cfg.keyEnv]){sendJson(res,200,{ok:false,status:'missing_key',message:'Falta configurar '+cfg.keyEnv+' no .env e reiniciar o servidor.'});return;}
+        if(cfg.protocol==='ollama'){
+          const r=await fetch(new URL('/api/tags',cfg.endpoint+'/'),{signal:AbortSignal.timeout(7000)});
+          if(!r.ok){sendJson(res,200,{ok:false,status:'http_error',message:'Ollama respondeu HTTP '+r.status});return;}
+          const j=await r.json() as {models?:Array<{name:string}>};
+          const models=(j.models||[]).map(x=>x.name);
+          sendJson(res,200,{ok:models.includes(cfg.model),status:models.includes(cfg.model)?'ready':'model_missing',message:models.includes(cfg.model)?'Ollama conectado e modelo instalado.':'Ollama conectado, mas o modelo selecionado não está instalado.',models});
+          return;
+        }
+        // Para APIs externas, o teste é uma chamada real e pode consumir cota.
+        const r=await fetch(cfg.endpoint.replace(/\/$/,'')+'/chat/completions',{
+          method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+(cfg.keyEnv?process.env[cfg.keyEnv]:'')},
+          body:JSON.stringify({model:cfg.model,messages:[{role:'user',content:'Responda OK.'}],max_tokens:5,stream:false}),
+          signal:AbortSignal.timeout(20000)
+        });
+        const status=r.status;
+        if(!r.ok){sendJson(res,200,{ok:false,status:'http_error',httpStatus:status,message:status===401?'Chave inválida ou não autorizada.':status===404?'Modelo ou endpoint não encontrado.':status===429?'Limite de uso atingido.':'Provedor respondeu HTTP '+status});return;}
+        sendJson(res,200,{ok:true,status:'ready',message:'Provedor respondeu à consulta de teste.'});
+      }catch(e){sendJson(res,200,{ok:false,status:'connection_error',message:'Não foi possível conectar ao provedor: '+errorText(e)});}})();return true;
     }
     if(path==='/api/local-ai/chat' && req.method==='POST'){
       void(async()=>{let id='';try{

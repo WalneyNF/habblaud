@@ -44,6 +44,8 @@ As imagens abaixo já fazem parte do repositório original e mostram recursos do
 | Groq, OpenAI, Gemini, OpenRouter e APIs compatíveis | Conectores implementados; requerem credenciais e testes individuais |
 | Chaves via arquivo `.env` no servidor | Implementado |
 | Manual HTML em `/manual-ia` | Implementado |
+| Instalador assistido Windows com diagnóstico | **Implementado e testado** |
+| Botão de teste de conexão na central de provedores | **Implementado e testado com Ollama** |
 | Agentes capazes de editar arquivos e executar testes automaticamente | **Ainda não implementado nesta integração** |
 | Assistente Windows para verificar requisitos e oferecer instalação de Node/Git/Ollama via winget | **Implementado e testado com requisitos já instalados** |
 | Download automático de modelos Ollama e integração nativa com OpenCode CLI | **Ainda não implementados** |
@@ -262,15 +264,15 @@ Depois, coloque `MINHA_IA_API_KEY=SUA_CHAVE` no `.env`, reinicie o servidor e te
 | Porta 4747 ocupada | Defina `HABBLAUD_PORT=4750` |
 | Escritório vazio | Desative o modo demonstração e envie uma tarefa no laboratório |
 
-O manual HTML também está disponível em **/manual-ia**. Para detalhes adicionais, consulte [README-COMMUNITY.pt-BR.md](README-COMMUNITY.pt-BR.md). Para aprender a publicar novas versões, usar Git e atualizar seu fork, leia o [Manual do Desenvolvedor em português](MANUAL-DESENVOLVEDOR.pt-BR.md).
+O [Plano de Desenvolvimento](PLANO-DESENVOLVIMENTO.pt-BR.md) apresenta as fases concluídas, pendências e critérios para uma versão estável. O manual HTML também está disponível em **/manual-ia**. Para detalhes adicionais, consulte [README-COMMUNITY.pt-BR.md](README-COMMUNITY.pt-BR.md). Para aprender a publicar novas versões, usar Git e atualizar seu fork, leia o [Manual do Desenvolvedor em português](MANUAL-DESENVOLVEDOR.pt-BR.md).
 
 ## 🗺️ Próximas melhorias
 
-Estas são **metas, não recursos prontos**: integração direta do OpenCode CLI, gerenciamento de equipes de agentes, ferramentas de programação com autorização explícita, testes automatizados por provedor, interface integrada às configurações do escritório, streaming de respostas, armazenamento seguro de segredos pelo sistema operacional, instalador para iniciantes e documentação ilustrada com capturas das novas telas.
+Estas são **metas, não recursos prontos**: integração direta do OpenCode CLI, gerenciamento de equipes de agentes, ferramentas de programação com autorização explícita, testes automatizados abrangentes por provedor, interface integrada às configurações do escritório, streaming de respostas, armazenamento seguro de segredos pelo sistema operacional, instalador Windows assinado e documentação ilustrada com capturas das novas telas. O assistente CMD/PowerShell e o teste básico de conexão já estão implementados.
 
 ## 📦 Estado da publicação
 
-O desenvolvimento e os testes desta extensão estão ocorrendo na branch local `feature/ollama-groq`. **Ter um fork no GitHub não publica automaticamente os commits locais.** Antes de recomendar o clone para outras pessoas, publique a branch, revise o diff e valide uma instalação limpa. O build e o typecheck da extensão passaram; a suíte completa do projeto ainda apresenta falhas que precisam ser investigadas.
+O desenvolvimento desta extensão ocorre na branch `feature/ollama-groq` do fork. **A branch está publicada no GitHub, mas pode ainda não ter sido incorporada à `main`.** Antes de recomendar a instalação para outras pessoas, revise o diff e valide uma instalação limpa. O build e o typecheck da extensão passaram; a suíte completa do projeto ainda apresenta falhas que precisam ser investigadas.
 
 ## ❤️ Créditos e licença
 
