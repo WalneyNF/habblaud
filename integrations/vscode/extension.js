@@ -20,6 +20,10 @@ const presets=[
  {label:'Melhorar desempenho',value:'Identifique gargalos de desempenho e proponha melhorias justificadas.'},
  {label:'Refatorar',value:'Sugira refatoração para legibilidade, manutenção e testes sem mudar comportamento.'},
  {label:'Criar testes',value:'Sugira testes unitários e casos de borda para este código.'},
+ {label:'Mentor: me ensine este código',value:'Atue como mentor paciente de um programador experiente. Explique a intenção, fluxo, decisões e alternativas. Separe o que é fato do que é hipótese. Inclua um exercício prático e uma pergunta para verificar entendimento. Não altere arquivos.'},
+ {label:'Raio-X: riscos e dependências',value:'Faça um raio-X técnico do trecho: responsabilidades, entradas, saídas, dependências visíveis, acoplamento, pontos de falha, riscos de segurança e prioridades de melhoria. Não invente dependências ausentes. Não altere arquivos.'},
+ {label:'Modernização sem reescrever tudo',value:'Proponha uma modernização incremental preservando regras de negócio. Liste testes de caracterização antes das mudanças, passos reversíveis, riscos e critérios de aceite. Não proponha reescrita total sem justificativa. Não altere arquivos.'},
+ {label:'Revisão de regressões',value:'Identifique comportamentos que devem permanecer estáveis. Proponha testes de regressão e cenários de borda com entradas, saídas esperadas e critérios de verificação. Não afirme ter executado testes. Não altere arquivos.'},
  {label:'Pergunta personalizada',value:null}
 ];
 async function analyze(scope){
