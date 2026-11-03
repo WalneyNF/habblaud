@@ -246,7 +246,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env, argv: string[] 
     timeline: !env.HABBLAUD_TIMELINE?.trim() || isTruthy(env.HABBLAUD_TIMELINE),
     rootDir,
     version: pkg.version,
-    repo: pkg.repo,
+    repo: env.HABBLAUD_UPDATE_REPO?.trim() ? parseGithubRepo('https://github.com/'+env.HABBLAUD_UPDATE_REPO.trim()) : pkg.repo,
     updateCheck: !env.HABBLAUD_UPDATE_CHECK?.trim() || isTruthy(env.HABBLAUD_UPDATE_CHECK),
     codex: !env.HABBLAUD_CODEX?.trim() || isTruthy(env.HABBLAUD_CODEX),
     remote: remote.config,

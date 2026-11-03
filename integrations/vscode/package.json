@@ -9,13 +9,18 @@
   },
   "main": "./extension.js",
   "activationEvents": [
-    "onCommand:habblaud.analyzeSelection"
+    "onCommand:habblaud.analyzeSelection",
+    "onCommand:habblaud.analyzeDocument"
   ],
   "contributes": {
     "commands": [
       {
         "command": "habblaud.analyzeSelection",
         "title": "Habblaud: Analisar seleção com agente"
+      },
+      {
+        "command": "habblaud.analyzeDocument",
+        "title": "Habblaud: Analisar documento aberto com agente"
       }
     ],
     "menus": {

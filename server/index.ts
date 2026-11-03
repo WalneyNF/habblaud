@@ -475,6 +475,12 @@ if (config.remote) {
 server.listen(config.port, config.host, () => {
   const host = config.host === '0.0.0.0' || config.host === '::' ? 'localhost' : config.host;
   log.info(tr('🏢 Habblaud {0}{1}{2} em http://{3}:{4}', [config.version, config.dev ? ' (dev)' : '', config.inDocker ? ' (docker)' : '', host, config.port]));
+  log.info('   🤖 Habblaud AI Community · Edição independente');
+  log.info('   Desenvolvedor do fork: Walney Moreira Klein · walneyk@hotmail.com');
+  log.info('   Fork: https://github.com/WalneyNF/habblaud');
+  log.info('   Projeto original: https://github.com/marmottajr/habblaud (licença MIT)');
+  log.info(tr('   Marketplace de agentes: http://{0}:{1}/agent-market', [host, config.port]));
+  log.info(tr('   Laboratório de IA: http://{0}:{1}/ia-lab', [host, config.port]));
   const list = accounts.entries();
   if (!list.length) log.warn(tr('Nenhuma pasta do Claude Code encontrada (defina HABBLAUD_CLAUDE_DIRS).'));
   for (const dir of codexDirsRefused(process.env, config.home)) {
