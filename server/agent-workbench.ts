@@ -1,6 +1,7 @@
 import type {IncomingMessage,ServerResponse} from 'node:http';
 import {existsSync,mkdirSync,readFileSync,writeFileSync,readdirSync,realpathSync,lstatSync} from 'node:fs';
 import {join,resolve,relative,isAbsolute,sep} from 'node:path';
+import {createHash} from 'node:crypto';
 import {readJson,sendJson} from './http/app';
 
 type Agent={id:string;name:string;role:string;personality:string;provider:string;skills:string[]};
@@ -58,7 +59,7 @@ export function createWorkbenchHandler(root:string){
  }
  const action=p.split('/').pop();
  if(req.method==='GET'&&action==='catalog'){sendJson(res,200,load());return true;}
- if(req.method==='POST'&&['agents','skills','workspaces','inspect'].includes(action||'')){
+ if(req.method==='POST'&&['agents','skills','workspaces','inspect','review'].includes(action||'')){
   void(async()=>{try{
    const body=await readJson(req,12000) as Record<string,unknown>;
    const s=load();
@@ -80,6 +81,22 @@ export function createWorkbenchHandler(root:string){
     if(!s.workspaces.some(x=>x.id===w.id)&&s.workspaces.length>=20)throw Error('Limite de 20 pastas.');
     s.workspaces=s.workspaces.filter(x=>x.id!==w.id).concat(w);save(s);sendJson(res,200,{ok:true});return;
    }
+   if(action==='review'){
+    const w=s.workspaces.find(x=>x.id===body.workspace);
+    if(!w)throw Error('Pasta não autorizada.');
+    if(typeof body.file!=='string'||typeof body.proposed!=='string'||body.proposed.length>8000||typeof body.baselineSha256!=='string'||!(/^[a-f0-9]{64}$/).test(body.baselineSha256))throw Error('Proposta ou hash inválidos (máximo 8000 caracteres).');
+    const base=validateWorkspace(w.path);
+    const target=secureFile(base,body.file);
+    if(lstatSync(target).size>100000)throw Error('Arquivo grande demais.');
+    const original=readFileSync(target,'utf8');
+    if(original.includes('\uFFFD')||original.includes('\0')||original.length>40000)throw Error('Arquivo não suportado ou truncado.');
+    const sha256=createHash('sha256').update(original).digest('hex');
+    if(sha256!==body.baselineSha256)throw Error('Arquivo mudou desde a leitura. Reabra antes de revisar.');
+    const proposed=body.proposed;
+    const oldLines=original.split('\n'),newLines=proposed.split('\n');
+    const changes=Math.abs(oldLines.length-newLines.length)+oldLines.slice(0,Math.min(oldLines.length,newLines.length)).filter((v,i)=>v!==newLines[i]).length;
+    sendJson(res,200,{workspace:w.name,file:body.file,original,proposed,baselineSha256:sha256,proposedSha256:createHash('sha256').update(proposed).digest('hex'),changed:original!==proposed,estimatedChangedLines:changes,verifiedAt:new Date().toISOString(),persisted:false});return;
+   }
    if(action==='inspect'){
     const w=s.workspaces.find(x=>x.id===body.workspace);
     if(!w)throw Error('Pasta não autorizada.');
@@ -93,7 +110,7 @@ export function createWorkbenchHandler(root:string){
       const stat=lstatSync(target);if(stat.size>100000)throw Error('Arquivo acima de 100 KB; leitura bloqueada.');
       const content=readFileSync(target,'utf8');
       if(content.includes('\uFFFD')||content.includes('\0'))throw Error('Somente arquivos de texto UTF-8.');
-      sendJson(res,200,{workspace:w.name,file:body.file,content:content.slice(0,40000),truncated:content.length>40000});return;
+      sendJson(res,200,{workspace:w.name,file:body.file,content:content.slice(0,40000),truncated:content.length>40000,sha256:createHash('sha256').update(content).digest('hex')});return;
     }
     throw Error('Operação não permitida.');
    }
