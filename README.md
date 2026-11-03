@@ -16,7 +16,23 @@
 
 O Habblaud transforma a atividade dos agentes de IA em um **escritório virtual animado**. Em vez de acompanhar somente um terminal, você visualiza personagens, salas e atividades. A versão original acompanha principalmente Claude Code e Codex. **Este fork adiciona um laboratório de IA** para conectar modelos locais e serviços de API, mesmo que você não utilize Claude Code.
 
-**Não precisa ser programador para experimentar:** siga as etapas abaixo, instale um modelo local ou configure uma chave de API e envie sua primeira pergunta. O cadastro de provedores funciona em uma página separada do escritório, acessível por **/ia-lab**.
+**Não precisa ser programador para experimentar:** siga as etapas abaixo, instale um modelo local ou configure uma chave de API e envie sua primeira pergunta. O cadastro de provedores abre em uma **janela dentro do escritório** pelo botão **⚙ IA**; a rota direta **/ia-lab** continua disponível para diagnóstico.
+
+## 🖼️ Galeria — Habblaud AI Community (fork)
+
+As capturas abaixo foram feitas na edição comunitária com o **estilo Hacker IA**. Elas ilustram as mudanças visuais e os módulos adicionados ao fork. Para comparar, veja também as imagens do **Habblaud original** na seção seguinte. As capturas não significam que agentes já possam executar comandos ou editar arquivos sem supervisão.
+
+| Captura 1 | Captura 2 |
+|---|---|
+| ![Habblaud AI Community — Hacker IA, captura 1](docs/screenshots/community-hacker/Screenshot_1.png) | ![Habblaud AI Community — Hacker IA, captura 2](docs/screenshots/community-hacker/Screenshot_2.png) |
+| ![Habblaud AI Community — Hacker IA, captura 3](docs/screenshots/community-hacker/Screenshot_3.png) | ![Habblaud AI Community — Hacker IA, captura 4](docs/screenshots/community-hacker/Screenshot_4.png) |
+| ![Habblaud AI Community — Hacker IA, captura 5](docs/screenshots/community-hacker/Screenshot_5.png) | ![Habblaud AI Community — Hacker IA, captura 6](docs/screenshots/community-hacker/Screenshot_6.png) |
+| ![Habblaud AI Community — Hacker IA, captura 7](docs/screenshots/community-hacker/Screenshot_7.png) | ![Habblaud AI Community — Hacker IA, captura 8](docs/screenshots/community-hacker/Screenshot_8.png) |
+| ![Habblaud AI Community — Hacker IA, captura 9](docs/screenshots/community-hacker/Screenshot_9.png) | ![Habblaud AI Community — Hacker IA, captura 10](docs/screenshots/community-hacker/Screenshot_10.png) |
+
+![Habblaud AI Community — Hacker IA, captura 11](docs/screenshots/community-hacker/Screenshot_11.png)
+
+**Diferenças de interface:** o fork inclui estilo de interface Hacker IA, acesso ao Marketplace de Agentes e à Central de Provedores por janelas no escritório, cadastro de agentes/skills e integração experimental com VS Code. **Limite atual:** a integração comunitária ainda não executa edição automática autorizada de arquivos.
 
 ### Imagens do Habblaud original
 
