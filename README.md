@@ -46,6 +46,7 @@ As imagens abaixo já fazem parte do repositório original e mostram recursos do
 | Manual HTML em `/manual-ia` | Implementado |
 | Instalador assistido Windows com diagnóstico | **Implementado e testado** |
 | Botão de teste de conexão na central de provedores | **Implementado e testado com Ollama** |
+| Marketplace de agentes em `/agent-market` | **Cadastro de agentes, skills e leitura supervisionada implementados; sem execução de comandos** |
 | Agentes capazes de editar arquivos e executar testes automaticamente | **Ainda não implementado nesta integração** |
 | Assistente Windows para verificar requisitos e oferecer instalação de Node/Git/Ollama via winget | **Implementado e testado com requisitos já instalados** |
 | Download automático de modelos Ollama e integração nativa com OpenCode CLI | **Ainda não implementados** |
