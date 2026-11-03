@@ -44,12 +44,12 @@ function secureFile(base:string,rel:string):string{
 export function createWorkbenchHandler(root:string){
  return (req:IncomingMessage,res:ServerResponse,url:URL):boolean=>{
  const p=url.pathname;
- if(p!=='/agent-market'&&p!=='/agent-market.css'&&!p.startsWith('/api/agent-workbench/'))return false;
+ if(p!=='/agent-market'&&p!=='/agent-market.css'&&p!=='/ai-form-theme.css'&&!p.startsWith('/api/agent-workbench/'))return false;
  const ip=(req.socket.remoteAddress||'').replace(/^::ffff:/,'');
  if(ip!=='::1'&&!ip.startsWith('127.')){sendJson(res,403,{error:'Somente acesso local'});return true;}
- if(p==='/agent-market.css'){
+ if(p==='/agent-market.css'||p==='/ai-form-theme.css'){ 
   if(req.method!=='GET'){sendJson(res,405,{error:'Método não permitido'});return true;}
-  res.writeHead(200,{'Content-Type':'text/css; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.end(readFileSync(join(root,'community','market-themes.css')));return true;
+  res.writeHead(200,{'Content-Type':'text/css; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.end(readFileSync(join(root,'community',p==='/ai-form-theme.css'?'ai-form-theme.css':'market-themes.css')));return true;
  }
  if(p==='/agent-market'){
   if(req.method!=='GET'){sendJson(res,405,{error:'Método não permitido'});return true;}

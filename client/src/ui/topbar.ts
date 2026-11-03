@@ -178,7 +178,7 @@ export class TopBar implements UiComponent {
     close.addEventListener('click', () => dialog.close());
     bar.append(label, close);
     const frame = document.createElement('iframe');
-    frame.src = path;
+    frame.src = path + '?skin=' + (document.documentElement.dataset.officeSkin === 'hacker' ? 'hacker' : 'original');
     frame.title = title;
     frame.style.cssText = 'display:block;width:100%;height:calc(100% - 46px);border:0;background:#111b29';
     dialog.append(bar, frame);

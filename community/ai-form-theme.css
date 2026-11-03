@@ -1,0 +1,14 @@
+/* Tema compartilhado: cadastros, formulários, respostas e modais dos módulos IA. */
+:root{--ai-bg:#10151e;--ai-panel:#171f2b;--ai-border:#465468;--ai-text:#e9f1fc;--ai-accent:#8bcaff;--ai-button:#294b65;--ai-input:#0e1825;--ai-radius:9px}
+:root[data-theme="hacker"]{--ai-bg:#030e0b;--ai-panel:#071b13;--ai-border:#2b8e59;--ai-text:#d0ffe3;--ai-accent:#52ffa1;--ai-button:#145338;--ai-input:#03140c;--ai-radius:4px}
+body{background:var(--ai-bg)!important;color:var(--ai-text)!important}
+header,.panel,.card,section,dialog{background:var(--ai-panel)!important;color:var(--ai-text)!important;border-color:var(--ai-border)!important;border-radius:var(--ai-radius)!important}
+header{border-bottom:1px solid var(--ai-border)!important}
+input,select,textarea,button{border-radius:var(--ai-radius)!important;border:1px solid var(--ai-border)!important;color:var(--ai-text)!important}
+input,select,textarea,pre{background:var(--ai-input)!important;color:var(--ai-text)!important}
+button{background:var(--ai-button)!important;color:var(--ai-text)!important;cursor:pointer}
+button:hover,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--ai-accent);outline-offset:1px}
+a,h2,h3{color:var(--ai-accent)}
+dialog::backdrop{background:rgba(0,0,0,.76)}
+:root[data-theme="hacker"] header h1,:root[data-theme="hacker"] h2{font-family:Consolas,monospace;text-shadow:0 0 9px #38ff8938}
+:root[data-theme="hacker"] .panel,:root[data-theme="hacker"] .card,:root[data-theme="hacker"] dialog{box-shadow:0 0 18px #24ff7512}
