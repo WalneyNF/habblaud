@@ -1,0 +1,7 @@
+# Responsáveis pela revisão do fork Habblaud.
+# Só é aplicado como exigência quando regras de proteção do GitHub estiverem configuradas.
+* @WalneyNF
+/.github/ @WalneyNF
+/server/ @WalneyNF
+/community/ @WalneyNF
+/manuais/ @WalneyNF

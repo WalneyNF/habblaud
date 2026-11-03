@@ -1,0 +1,26 @@
+name: Propor funcionalidade
+description: Discuta melhorias antes de implementar
+title: "[Proposta] "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problema a resolver
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solução proposta
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Critérios de aceite e testes
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Riscos e alternativas
