@@ -7,10 +7,10 @@ const root=resolve(process.env.GODS_EYE_ROOT||'D:/xampp2/htdocs/gods-eye-view-in
 const tools=['get_earthquakes','get_active_fires','get_recent_launches'];
 export function createGeoBridge(habblaudRoot:string){
  return (req:IncomingMessage,res:ServerResponse,url:URL):boolean=>{
-  if(!['/geo-lab','/geo-mission','/api/geo/tools','/api/geo/query'].includes(url.pathname))return false;
+  if(!['/geo-lab','/geo-mission','/roadmap.html','/api/geo/tools','/api/geo/query'].includes(url.pathname))return false;
   const ip=(req.socket.remoteAddress||'').replace(/^::ffff:/,'');
   if(ip!=='::1'&&!ip.startsWith('127.')){sendJson(res,403,{error:'Laboratório disponível apenas localmente'});return true;}
-  if(url.pathname==='/geo-lab'||url.pathname==='/geo-mission'){if(req.method!=='GET'){sendJson(res,405,{error:'Método inválido'});return true;}res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store','Content-Security-Policy':"default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; frame-src http://127.0.0.1:4173 http://localhost:4173; base-uri 'none'; form-action 'none'"});res.end(readFileSync(join(habblaudRoot,'community',url.pathname==='/geo-mission'?'geo-mission.html':'geo-lab.html')));return true;}
+  if(url.pathname==='/geo-lab'||url.pathname==='/geo-mission'||url.pathname==='/roadmap.html'){if(req.method!=='GET'){sendJson(res,405,{error:'Método inválido'});return true;}res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store','Content-Security-Policy':"default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; frame-src http://127.0.0.1:4173 http://localhost:4173; base-uri 'none'; form-action 'none'"});res.end(readFileSync(join(habblaudRoot,'community',url.pathname==='/geo-mission'?'geo-mission.html':url.pathname==='/roadmap.html'?'roadmap.html':'geo-lab.html')));return true;}
   if(url.pathname==='/api/geo/tools'){sendJson(res,200,{tools,configured:existsSync(join(root,'server','mcp','stdio.js')),root});return true;}
   if(req.method!=='POST'){sendJson(res,405,{error:'Método inválido'});return true;}
   void(async()=>{try{

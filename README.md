@@ -318,3 +318,7 @@ Este fork Ã© independente e nÃ£o Ã© endossado oficialmente pelo mantenedor origi
 
 Na Central de Missões (`/geo-mission`), use **Cadastrar preset** para salvar um destino com nome e coordenadas, ou **Salvar local exibido** para capturar a câmera atual do globo. Favoritos são locais ao navegador, podem ser exportados/importados em JSON e não exigem conta. Veja o [manual de presets](manuais/23-presets-geograficos.md). A integração é experimental e depende dos dois serviços locais; não há demonstração pública hospedada.
 
+
+### ğŸŒ Roadmap pÃºblico e Geo Cinema experimental
+
+[Abra o roadmap HTML](community/roadmap.html) para explorar os dez mÃ³dulos, fases, dependÃªncias e critÃ©rios de aceite. Na instalaÃ§Ã£o local, o roadmap Ã© servido em `http://127.0.0.1:4747/roadmap.html` apÃ³s reconstruir e reiniciar o servidor. A Central de MissÃµes possui um **Geo Cinema inicial**: adicione dois ou mais destinos, escolha a duraÃ§Ã£o e reproduza voos entre eles no globo incorporado. NÃ£o hÃ¡ ainda timeline, persistÃªncia de roteiros nem gravaÃ§Ã£o de vÃ­deo. [Manual tÃ©cnico](manuais/25-roadmap-geo-cinema.md).
