@@ -35,3 +35,9 @@ Cada módulo precisa de testes automatizados, validação visual, recuperação 
 3. Clique Reproduzir roteiro e observe os voos da câmera; teste Parar durante um voo.
 4. Teste entrada inválida (duração menor que 1 ou maior que 30), roteiro com menos de duas paradas e remoção de destinos.
 5. Verifique se favoritos, IA e camadas existentes continuam acessíveis.
+
+## Geo Turismo — Wikipédia GeoSearch
+
+A Central de Missões oferece consulta sob demanda de artigos geolocalizados próximos ao destino selecionado. Escolha raio de 1, 3, 5 ou 10 km e clique **Descobrir atrações próximas**. O navegador consulta primeiro `pt.wikipedia.org/w/api.php` e tenta `en.wikipedia.org` quando não encontra resultados. Cada cartão mostra título, distância aproximada informada pela API, link para o artigo, ação de visita no globo e cadastro como preset. A consulta não ocorre automaticamente durante a navegação, para evitar solicitações excessivas e exposição inesperada de coordenadas. Não exige chave de API.
+
+**Limitações:** resultados são artigos geolocalizados, não um catálogo turístico validado; a Wikipédia pode ter dados incompletos, pontos fora de cobertura e falhas de rede. Nenhum estabelecimento, preço ou horário é garantido. O conteúdo e links são atribuídos à Wikipédia e sujeitos aos termos Wikimedia. Para dados estruturados de museus, atrações e mirantes, integrar Overpass posteriormente com cache, limites e atribuição ODbL.
