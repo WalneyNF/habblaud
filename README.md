@@ -1,3 +1,5 @@
+> **Community fork:** integração experimental de Ollama, OpenAI, Gemini, Groq e outros provedores. [Leia o README da adaptação em português](README-COMMUNITY.pt-BR.md). Projeto original: [marmottajr/habblaud](https://github.com/marmottajr/habblaud). Créditos da adaptação: Walney Moreira Klein — walneyk@hotmail.com.
+
 <p align="center">
   <img src="client/public/assets/brand/logo-mark@4x.png" width="96" alt="Habblaud logo: a small pixel-art building" />
 </p>
