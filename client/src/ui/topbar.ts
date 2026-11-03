@@ -133,6 +133,8 @@ export class TopBar implements UiComponent {
       this.feedBtn,
       this.worldBtn,
       this.settingsBtn,
+      h('button', { class: 'ui-btn', type: 'button', title: 'Abrir o Marketplace de Agentes IA', attrs: { 'aria-label': 'Marketplace de Agentes IA' }, on: { click: () => { window.location.assign('/agent-market'); } } }, '🤖 IA'),
+      h('button', { class: 'ui-btn', type: 'button', title: 'Abrir a Central de Provedores IA', attrs: { 'aria-label': 'Central de Provedores IA' }, on: { click: () => { window.location.assign('/ia-lab'); } } }, '⚙ IA'),
       iconButton(ICONS.help, tr('Ajuda (?)'), () => ctx.openHelp()),
     );
     this.panelGroup = panelGroup;
