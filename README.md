@@ -257,7 +257,7 @@ Depois, coloque `MINHA_IA_API_KEY=SUA_CHAVE` no `.env`, reinicie o servidor e te
 | Porta 4747 ocupada | Defina `HABBLAUD_PORT=4750` |
 | Escritório vazio | Desative o modo demonstração e envie uma tarefa no laboratório |
 
-O manual HTML também está disponível em **/manual-ia**. Para detalhes adicionais, consulte [README-COMMUNITY.pt-BR.md](README-COMMUNITY.pt-BR.md).
+O manual HTML também está disponível em **/manual-ia**. Para detalhes adicionais, consulte [README-COMMUNITY.pt-BR.md](README-COMMUNITY.pt-BR.md). Para aprender a publicar novas versões, usar Git e atualizar seu fork, leia o [Manual do Desenvolvedor em português](MANUAL-DESENVOLVEDOR.pt-BR.md).
 
 ## 🗺️ Próximas melhorias
 
