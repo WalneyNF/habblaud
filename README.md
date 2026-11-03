@@ -2,6 +2,8 @@
 
 <h1 align="center">üè¢ Habblaud AI Community</h1>
 
+> **Integra√ß√£o priorit√°ria do fork ‚Äî God's Eye View:** laborat√≥rio geoespacial experimental em `/geo-lab` e experi√™ncia cinematogr√°fica em `/geo-mission` ([manual](manuais/21-geo-mission-cinematica.md)), conectado ao MCP local do God's Eye View. Consulte [manual de integra√ß√£o, seguran√ßa e responsabilidades](manuais/20-integracao-oficial-gods-eye.md). Dados p√∫blicos n√£o garantem acesso irrestrito; cada usu√°rio deve respeitar permiss√µes, licen√ßas e legisla√ß√£o. O laborat√≥rio ainda n√£o √© uma equipe aut√¥noma de m√∫ltiplos agentes.
+
 <p align="center"><strong>Seu escrit√≥rio virtual de agentes de intelig√™ncia artificial ‚Äî com Ollama local, Groq, OpenAI, Gemini e outros provedores.</strong></p>
 
 <p align="center">Fork comunit√°rio mantido por <strong>Walney Moreira Klein</strong> ¬∑ <a href="mailto:walneyk@hotmail.com">walneyk@hotmail.com</a></p>
@@ -298,3 +300,16 @@ O desenvolvimento desta extens√£o ocorre na branch `feature/ollama-groq` do fork
 **Projeto original:** [marmottajr/habblaud](https://github.com/marmottajr/habblaud), sob licen√ßa **MIT**. O Habblaud original, seus recursos visuais e as capturas de tela preservadas s√£o creditados aos seus autores. Consulte o arquivo [LICENSE](LICENSE) e preserve os avisos de direitos autorais.
 
 Este fork √© independente e n√£o √© endossado oficialmente pelo mantenedor original. Contribui√ß√µes, relatos de problemas e sugest√µes s√£o bem-vindos por meio do reposit√≥rio do fork.
+
+### ?? Geo Mission ó integraÁ„o experimental com God's Eye View
+
+**DemonstraÁ„o local, n„o serviÁo hospedado:** esta branch conecta o Habblaud ao fork [God's Eye View](https://github.com/WalneyNF/gods-eye-view/tree/feature/habblaud-geo-integration) por MCP e incorpora o globo 3D em uma central de missıes. Os agentes visuais Aurora, Byte e Atlas representam papÈis numa chamada de IA; n„o s„o ainda trÍs agentes independentes.
+
+1. Clone a branch `feature/habblaud-geo-integration` do God's Eye View e execute `npm install`.
+2. No PowerShell do God's Eye View, defina `$env:GEV_EMBED_FRAME_ANCESTORS='http://127.0.0.1:4747'` e inicie o servidor de desenvolvimento na porta **4173**.
+3. No PowerShell do Habblaud, defina `$env:GODS_EYE_ROOT='CAMINHO_DA_PASTA_GODS_EYE_VIEW'`, instale dependÍncias e inicie o servidor local na porta **4747**.
+4. Abra `http://127.0.0.1:4747/geo-mission` para a experiÍncia visual e `/geo-lab` para ferramentas MCP. Configure Ollama ou outro provedor para gerar o relatÛrio da miss„o.
+
+**SeguranÁa:** n„o exponha os servidores de desenvolvimento ‡ internet. A autorizaÁ„o de acesso e os termos das fontes de dados devem ser respeitados pelo usu·rio, sem afastar as obrigaÁıes de seguranÁa e privacidade dos desenvolvedores e operadores. Leia os [manuais da ponte](manuais/20-integracao-oficial-gods-eye.md), [miss„o](manuais/21-geo-mission-cinematica.md) e [painÈis](manuais/22-paineis-camadas-geo.md).
+
+
