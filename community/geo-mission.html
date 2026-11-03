@@ -67,7 +67,7 @@ $('exportPresets').onclick=()=>{const blob=new Blob([JSON.stringify({schemaVersi
 $('importPresets').onclick=()=>$('presetFile').click();
 $('presetFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{if(f.size>200000)throw Error('Arquivo muito grande');const obj=JSON.parse(await f.text());if(obj.schemaVersion!==1||!Array.isArray(obj.presets))throw Error('Formato inválido');const incoming=obj.presets.filter(validPreset);if(incoming.length!==obj.presets.length||incoming.length+personalPresets.length>200)throw Error('Presets inválidos ou limite excedido');const ids=new Set(personalPresets.map(p=>p.id));for(const p of incoming){const copy={...p,id:'preset-'+Date.now()+'-'+Math.random().toString(36).slice(2,8)};if(!ids.has(copy.id))personalPresets.push(copy)}persistPresets();log('Importados '+incoming.length+' presets.')}catch(err){alert('Falha ao importar: '+err.message)}finally{e.target.value=''}};
 // Geo Labels & Places: consultas com limites e sem armazenamento de localização pessoal.
-let labelsBusy=false,labelsLastAt=0,labelsLastCenter=null,labelsRequest=0;
+let labelsBusy=false,labelsLastAt=0,labelsLastCenter=null,labelsRequest=0,labelsLastSuccess=false,labelsLastCount=0;
 function geoDistance(a,b){const dlat=(a.lat-b.lat)*111000,dlon=(a.lon-b.lon)*111000*Math.cos(a.lat*Math.PI/180);return Math.hypot(dlat,dlon)}
 function cameraAtCenter(){return new Promise((resolve,reject)=>{const frame=$('globe'),id='geo-center-'+Date.now()+'-'+Math.random().toString(36).slice(2);const timer=setTimeout(()=>{removeEventListener('message',listener);reject(Error('Globo não respondeu'))},5000);const listener=e=>{if(e.origin!=='http://127.0.0.1:4173'||e.source!==frame.contentWindow||e.data?.type!=='gev:camera-response'||e.data.id!==id)return;clearTimeout(timer);removeEventListener('message',listener);resolve(e.data.camera)};addEventListener('message',listener);frame.contentWindow.postMessage({type:'gev:camera-request',id},'http://127.0.0.1:4173')})}
 function sendGeoLabels(items){$('globe').contentWindow.postMessage({type:'gev:geo-labels',items},'http://127.0.0.1:4173')}
@@ -79,8 +79,8 @@ async function refreshGeoLabels(manual=false){
   const c=await cameraAtCenter();
   if(!c||!Number.isFinite(c.lat)||!Number.isFinite(c.lon)||Math.abs(c.lat)>90||Math.abs(c.lon)>180)throw Error('Coordenadas inválidas');
   if(c.alt>16000){sendGeoLabels([]);$('labelsStatus').textContent='Aproxime a câmera abaixo de 16 km para mostrar ruas.';return}
-  if(!manual&&labelsLastCenter&&geoDistance(c,labelsLastCenter)<400){$('labelsStatus').textContent='Ruas atualizadas nesta região. Aproxime ou mova para atualizar.';return}
-  labelsLastAt=Date.now();labelsLastCenter=c;
+  if(!manual&&labelsLastSuccess&&labelsLastCenter&&geoDistance(c,labelsLastCenter)<400){$('labelsStatus').textContent=labelsLastCount+' nomes carregados nesta região. Use Atualizar ruas agora para consultar novamente.';return}
+  labelsLastAt=Date.now();
   const radius=c.alt<1500?650:c.alt<5000?1300:2500;
   const query='[out:json][timeout:15];way(around:'+radius+','+c.lat.toFixed(5)+','+c.lon.toFixed(5)+')[highway][name];out center 50;';
   $('labelsStatus').textContent='Consultando nomes de ruas no OpenStreetMap...';
@@ -108,11 +108,11 @@ async function refreshGeoLabels(manual=false){
   }
   const items=[],seen=new Set();
   for(const x of data.elements||[]){const name=x.tags?.name,lat=x.center?.lat,lon=x.center?.lon;if(typeof name!=='string'||!Number.isFinite(lat)||!Number.isFinite(lon)||seen.has(name))continue;seen.add(name);items.push({name,lat,lon});if(items.length>=35)break}
-  if(!$('labelsEnabled').checked||requestToken!==labelsRequest)return;sendGeoLabels(items);$('labelsStatus').textContent=items.length+' nomes de ruas no globo · '+source+' · OpenStreetMap ('+Math.round(radius/1000*10)/10+' km).';
- }catch(e){$('labelsStatus').textContent='Falha ao carregar ruas: '+e.message+'. Tente novamente mais tarde.'}
+  if(!$('labelsEnabled').checked||requestToken!==labelsRequest)return;sendGeoLabels(items);labelsLastSuccess=items.length>0;labelsLastCount=items.length;if(labelsLastSuccess)labelsLastCenter=c;$('labelsStatus').textContent=items.length?items.length+' nomes enviados ao globo · '+source+' · OpenStreetMap ('+Math.round(radius/1000*10)/10+' km).':'Consulta concluída, mas nenhuma rua nomeada retornou. Tente outra área ou raio.';
+ }catch(e){labelsLastSuccess=false;const message=e.name==='AbortError'?'tempo limite de 14 segundos na API':e.message;$('labelsStatus').textContent='Falha ao carregar ruas: '+message+'. O mapa continua funcionando; tente novamente mais tarde.'}
  finally{labelsBusy=false}
 }
-$('labelsEnabled').onchange=()=>{if($('labelsEnabled').checked){refreshGeoLabels(true)}else{labelsRequest++;sendGeoLabels([]);$('labelsStatus').textContent='Camada desligada.'}};
+$('labelsEnabled').onchange=()=>{if($('labelsEnabled').checked){refreshGeoLabels(true)}else{labelsRequest++;labelsLastSuccess=false;labelsLastCenter=null;sendGeoLabels([]);$('labelsStatus').textContent='Camada desligada.'}};
 $('labelsRefresh').onclick=()=>refreshGeoLabels(true);
 setInterval(()=>{if($('labelsEnabled').checked&&!document.hidden)refreshGeoLabels(false)},15000);
 let dossierPlace=null,dossierSeq=0;
